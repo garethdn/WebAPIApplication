@@ -49,14 +49,28 @@ namespace WebAPIApplication.Controllers
 
         // PUT api/users/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]User user)
+        public IActionResult Update(string id, [FromBody]User user)
         {
+            if (user == null || !user.Id.Equals(new Guid(id)))
+            {
+                return BadRequest();
+            }
+
+            if (Users.Find(user.Id) == null)
+            {
+                return NotFound();
+            }
+
+            Users.Update(user);
+
+            return new NoContentResult();
         }
 
         // DELETE api/users/5
         [HttpDelete("{id}")]
         public void Delete(string id)
         {
+            Users.Remove(new Guid(id));
         }
     }
 }
