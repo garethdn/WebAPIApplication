@@ -1,13 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+using WebAPIApplication.Data;
 using WebAPIApplication.Models;
+using WebAPIApplication.Repositories;
 
 namespace WebAPIApplication
 {
@@ -30,7 +31,14 @@ namespace WebAPIApplication
         {
             // Add framework services.
             services.AddMvc();
-            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IMovieRepository, MovieRepository>();
+            
+            services.AddDbContext<WebAPIApplicationDbContext>(options => 
+                options.UseSqlite(Configuration.GetConnectionString("SqlLiteTest")));
+            
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<WebAPIApplicationDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

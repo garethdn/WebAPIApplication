@@ -1,11 +1,8 @@
-using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebAPIApplication.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
     }
 }
